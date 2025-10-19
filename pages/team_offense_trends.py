@@ -1,5 +1,5 @@
 """
-NFL Stats page using nflreadpy data (pure Python!).
+Team Offense Trends page using nflreadpy data (port for "nflverse" R package).
 
 First run: python utils/load_nfl_data.py
 Then this page will query the Parquet files.
@@ -11,7 +11,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 from utils.query_engine import query_parquet, list_available_datasets
 
-dash.register_page(__name__, path="/nfl-stats", name="NFL Stats")
+dash.register_page(__name__, path="/team-offense-trends", name="Team Offense Trends")
 
 
 def get_available_teams():
@@ -41,8 +41,11 @@ def get_available_seasons():
 
 layout = html.Div(
     [
-        html.H1("🏈 NFL Statistics (nflreadpy data)"),
-        html.P("Interactive dashboard using real NFL data - 100% Python, no R needed!"),
+        html.H1("🏈 Team Offense Trends"),
+        html.P(
+            "Interactive dashboard using NFL offense data since 2022. "
+            "Data is pulled using `nflreadpy` which is built on top of the `nflverse` R package."
+        ),
         # Check if data exists
         html.Div(id="data-check", style={"margin-bottom": "20px"}),
         html.Div(
@@ -129,10 +132,6 @@ def check_data(season):
                 html.Span(
                     "✅ Data loaded successfully!",
                     style={"color": "green", "font-weight": "bold"},
-                ),
-                html.Span(
-                    " (Pure Python - no R needed!)",
-                    style={"color": "#666", "margin-left": "10px"},
                 ),
             ]
         )
