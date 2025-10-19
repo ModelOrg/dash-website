@@ -16,7 +16,7 @@ DATA_DIR = Path("data/parquet")
 DATA_DIR.mkdir(parents=True, exist_ok=True)
 
 
-def load_play_by_play(seasons=[2022, 2023, 2024]):
+def load_play_by_play(seasons=[2022, 2023, 2024, 2025]):
     """Load play-by-play data and save as Parquet"""
     print(f"Loading play-by-play data for seasons {seasons}...")
 
@@ -124,7 +124,7 @@ def load_team_info():
     return teams
 
 
-def load_rosters(seasons=[2024]):
+def load_rosters(seasons=[2025]):
     """Load player rosters"""
     print(f"Loading rosters for {seasons}...")
 
@@ -149,7 +149,7 @@ def main():
 
     try:
         # Load play-by-play
-        pbp = load_play_by_play(seasons=[2022, 2023, 2024])
+        pbp = load_play_by_play(seasons=[2022, 2023, 2024, 2025])
 
         # Create aggregated stats
         team_games = create_team_game_stats(pbp)
@@ -158,7 +158,7 @@ def main():
         teams = load_team_info()
 
         # Load rosters
-        rosters = load_rosters(seasons=[2024])
+        rosters = load_rosters(seasons=[2025])
 
         print("\n" + "=" * 60)
         print("✅ All data loaded successfully!")
