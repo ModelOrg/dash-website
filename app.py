@@ -4,7 +4,7 @@ import dash_bootstrap_components as dbc
 
 app = Dash(
     __name__,
-    use_pages=True,  # Enable multi-page support
+    use_pages=True,
     external_stylesheets=[dbc.themes.BOOTSTRAP],
     suppress_callback_exceptions=True,
 )
@@ -22,7 +22,7 @@ app.layout = dbc.Container(
             dark=True,
             className="mb-4",
         ),
-        dash.page_container,  # Pages auto-load here
+        dash.page_container,
     ],
     fluid=True,
 )
