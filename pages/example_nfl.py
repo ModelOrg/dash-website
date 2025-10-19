@@ -1,7 +1,7 @@
 """
-NFL Stats page using real nflverse data.
+NFL Stats page using nflreadpy data (pure Python!).
 
-First run: Rscript r_scripts/fetch_nflverse.R
+First run: python utils/load_nfl_data.py
 Then this page will query the Parquet files.
 """
 
@@ -18,11 +18,11 @@ def get_available_teams():
     """Get list of teams from the data"""
     try:
         teams_df = query_parquet(
-            "SELECT DISTINCT posteam FROM 'nfl_team_games.parquet' ORDER BY posteam"
+            "SELECT DISTINCT posteam FROM 'nfl_team_games.parquet' WHERE posteam IS NOT NULL ORDER BY posteam"
         )
         return [{"label": team, "value": team} for team in teams_df["posteam"].tolist()]
     except:
-        return [{"label": "Run fetch_nflverse.R first", "value": "NONE"}]
+        return [{"label": "Run load_nfl_data.py first", "value": "NONE"}]
 
 
 def get_available_seasons():
@@ -41,8 +41,8 @@ def get_available_seasons():
 
 layout = html.Div(
     [
-        html.H1("🏈 NFL Statistics (nflverse data)"),
-        html.P("Interactive dashboard using real NFL data from the nflverse R package"),
+        html.H1("🏈 NFL Statistics (nflreadpy data)"),
+        html.P("Interactive dashboard using real NFL data - 100% Python, no R needed!"),
         # Check if data exists
         html.Div(id="data-check", style={"margin-bottom": "20px"}),
         html.Div(
@@ -120,7 +120,7 @@ layout = html.Div(
 
 @callback(Output("data-check", "children"), Input("nfl-season-dropdown", "value"))
 def check_data(season):
-    """Check if nflverse data is available"""
+    """Check if NFL data is available"""
     datasets = list_available_datasets()
 
     if "nfl_team_games.parquet" in datasets:
@@ -129,7 +129,11 @@ def check_data(season):
                 html.Span(
                     "✅ Data loaded successfully!",
                     style={"color": "green", "font-weight": "bold"},
-                )
+                ),
+                html.Span(
+                    " (Pure Python - no R needed!)",
+                    style={"color": "#666", "margin-left": "10px"},
+                ),
             ]
         )
     else:
@@ -140,7 +144,7 @@ def check_data(season):
                     style={"color": "orange", "font-weight": "bold"},
                 ),
                 html.Span("Run: "),
-                html.Code("Rscript r_scripts/fetch_nflverse.R"),
+                html.Code("python utils/load_nfl_data.py"),
                 html.Span(" to load data."),
             ],
             style={
@@ -159,7 +163,7 @@ def update_teams(season):
             f"""
             SELECT DISTINCT posteam 
             FROM 'nfl_team_games.parquet' 
-            WHERE season = {season}
+            WHERE season = {season} AND posteam IS NOT NULL
             ORDER BY posteam
         """
         )
@@ -306,7 +310,10 @@ def update_dashboard(season, team, stat):
                     [
                         html.P([html.Strong("Avg Points/Game: "), f"{avg_points:.1f}"]),
                         html.P(
-                            [html.Strong("Total Turnovers: "), f"{total_turnovers}"]
+                            [
+                                html.Strong("Total Turnovers: "),
+                                f"{int(total_turnovers)}",
+                            ]
                         ),
                         html.P([html.Strong("Games Played: "), f"{len(team_data)}"]),
                     ]
