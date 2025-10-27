@@ -21,7 +21,7 @@ def get_available_teams():
             "SELECT DISTINCT posteam FROM 'nfl_team_games.parquet' WHERE posteam IS NOT NULL ORDER BY posteam"
         )
         return [{"label": team, "value": team} for team in teams_df["posteam"].tolist()]
-    except:
+    except Exception:
         return [{"label": "Run load_nfl_data.py first", "value": "NONE"}]
 
 
@@ -35,7 +35,7 @@ def get_available_seasons():
             {"label": str(year), "value": year}
             for year in seasons_df["season"].tolist()
         ]
-    except:
+    except Exception:
         return [{"label": "2024", "value": 2024}]
 
 
@@ -261,7 +261,7 @@ def update_dashboard(season, team, stat):
         total_stat = team_data[stat].sum()
         avg_stat = team_data[stat].mean()
         max_stat = team_data[stat].max()
-        min_stat = team_data[stat].min()
+        # min_stat = team_data[stat].min()
 
         avg_points = team_data["points"].mean()
         total_turnovers = team_data["turnovers"].sum()
