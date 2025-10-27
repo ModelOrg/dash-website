@@ -153,12 +153,15 @@ def main():
 
         # Create aggregated stats
         team_games = create_team_game_stats(pbp)
+        print(f"✓ Created team game stats ({len(team_games):,} games)")
 
         # Load team info
         teams = load_team_info()
+        print(f"✓ Loaded team info ({len(teams)} teams)")
 
         # Load rosters
         rosters = load_rosters(seasons=[2025])
+        print(f"✓ Loaded rosters ({len(rosters):,} players)")
 
         print("\n" + "=" * 60)
         print("✅ All data loaded successfully!")

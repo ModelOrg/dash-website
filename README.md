@@ -14,7 +14,9 @@ source venv/bin/activate  # Windows: venv\Scripts\activate
 
 # 3. Install dependencies
 pip install -r requirements.txt
-pre-commit install
+
+# 4. Setup pre-commit
+pre-commit install --hook-type pre-push
 
 # 4. Load NFL data (takes ~2-5 minutes)
 python utils/load_nfl_data.py
